@@ -1,0 +1,16 @@
+logging:
+  structured:
+    format:
+      console: com.example.logging.LoggingFormatter
+  level:
+    root: INFO
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+management:
+  tracing:
+    sampling:
+      probability: 1.0
