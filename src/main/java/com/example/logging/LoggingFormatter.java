@@ -29,27 +29,27 @@ public class LoggingFormatter implements StructuredLogFormatter<ILoggingEvent> {
 
     private static final JsonWriter<ILoggingEvent> DEFAULT = JsonWriter.of(DEFAULT_CONSUMER)
             .withNewLineAtEnd();
-    private static final JsonWriter<ILoggingEvent> EXCEPTION = JsonWriter.of(DEFAULT_CONSUMER.andThen(members ->
-                    members.add("exception", event -> event.getThrowableProxy().getMessage())))
-            .withNewLineAtEnd();
 
     private static final Map<Marker, JsonWriter<ILoggingEvent>> WRITERS = Map.of(
             Markers.DEFAULT, JsonWriter.of(DEFAULT_CONSUMER).withNewLineAtEnd(),
             Markers.EXCEPTION, JsonWriter.of(DEFAULT_CONSUMER.andThen(members -> {
-                members.add("exception", event -> event.getThrowableProxy().getMessage());
+                members.add("type", Markers.EXCEPTION.getName());
+                members.add("exception", event -> event.getThrowableProxy().getStackTraceElementProxyArray());
             })).withNewLineAtEnd(),
             Markers.REMOTE_CALL, JsonWriter.of(DEFAULT_CONSUMER.andThen(members -> {
+                members.add("type", Markers.REMOTE_CALL.getName());
                 members.add("exchangeType", event -> event.getMDCPropertyMap().get("exchangeType"));
                 members.add("method", event -> event.getMDCPropertyMap().get("method"));
                 members.add("uri", event -> event.getMDCPropertyMap().get("uri"));
                 members.add("headers", event -> event.getMDCPropertyMap().get("headers"));
             })).withNewLineAtEnd(),
             Markers.AUDIT, JsonWriter.of(DEFAULT_CONSUMER.andThen(members -> {
+                members.add("type", Markers.AUDIT.getName());
                 members.add("auditId", event -> event.getMDCPropertyMap().get("auditId"));
                 members.add("userId", event -> event.getMDCPropertyMap().get("userId"));
             })).withNewLineAtEnd(),
             Markers.TRACE, JsonWriter.of(DEFAULT_CONSUMER.andThen(members -> {
-                members.add("traceId", event -> event.getMDCPropertyMap().get("traceId"));
+                members.add("type", Markers.TRACE.getName());
             })).withNewLineAtEnd()
     );
 
