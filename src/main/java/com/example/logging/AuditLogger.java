@@ -1,31 +1,26 @@
 package com.example.logging;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-import org.springframework.boot.json.JsonWriter;
+import org.slf4j.Logger;
+import org.slf4j.event.Level;
+import org.slf4j.spi.LoggingEventBuilder;
 
-public final class AuditLogger implements TacticLogger {
-    static final Marker MARKER = MarkerFactory.getMarker("AUDIT");
+import java.util.Map;
 
-    private static final JsonWriter<ILoggingEvent> WRITER = JsonWriter.<ILoggingEvent>of(members -> {
-                members.add("time", ILoggingEvent::getInstant);
-                members.add("traceId", event -> event.getMDCPropertyMap().get("traceId"));
-                members.add("level", ILoggingEvent::getLevel);
-                members.add("logger", ILoggingEvent::getLoggerName);
-                members.add("thread", ILoggingEvent::getThreadName);
-                members.add("message", ILoggingEvent::getFormattedMessage);
-            })
-            .withNewLineAtEnd();
-
-    @Override
-    public Marker marker() {
-        return MARKER;
+public final class AuditLogger {
+    private final Logger delegate;
+    private AuditLogger(Logger loggerDelegate) {
+        this.delegate = loggerDelegate;
+    }
+    public static AuditLogger getLogger(Logger loggerDelegate) {
+        return new AuditLogger(loggerDelegate);
     }
 
-    @Override
-    public JsonWriter<ILoggingEvent> writer() {
-        return WRITER;
+    public void log(Map<String, Object> data) {
+        LoggingEventBuilder builder = delegate.atLevel(Level.INFO)
+                .addMarker(Markers.AUDIT);
+        for(Map.Entry<String, Object> entry: data.entrySet()) {
+            builder = builder.addKeyValue(entry.getKey(), entry.getValue());
+        }
+        builder.log("Audit log entry");
     }
-
 }

@@ -15,11 +15,11 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    private static final Marker MARKER = MarkerFactory.getMarker("EXCEPTION");
+    private static final Marker EXCEPTION = MarkerFactory.getMarker("EXCEPTION");
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<String>> handleException(Exception e) {
-        logger.error(MARKER, "An error occurred: {}", e.getMessage(), e);
+        logger.error(EXCEPTION, "An error occurred: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.failure(List.of(
                         ConstraintViolation.builder().name("unexpected")

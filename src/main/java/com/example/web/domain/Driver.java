@@ -19,10 +19,10 @@ public class Driver {
         this.countPerMonth = countPerMonth;
     }
 
-    static IntegerValidator<Integer> countPerMonthValidator = IntegerValidatorBuilder.of("countPerMonth",
+    static final IntegerValidator<Integer> countPerMonthValidator = IntegerValidatorBuilder.of("countPerMonth",
             c -> c.greaterThanOrEqual(0))
             .build();
-    public static Arguments1Validator<Map<String, Object>, Driver> mapValidator = countPerMonthValidator
+    public static final Arguments1Validator<Map<String, Object>, Driver> mapValidator = countPerMonthValidator
             .<Map<String, Object>>compose(m -> (int) m.get("countPerMonth"))
             .andThen(Driver::new);
 

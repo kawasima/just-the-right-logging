@@ -29,7 +29,9 @@ public class HighwayDrive {
         this.routeType = routeType;
     }
 
-    public static Arguments2Validator<PassEvent, PassEvent, Range<PassEvent>> passEventsValidator = (entered, exited, locale, context) -> {
+    public static final Arguments2Validator<PassEvent, PassEvent, Range<PassEvent>> passEventsValidator = (entered, exited, locale, context) -> {
+        assert entered != null;
+        assert exited != null;
         if (entered.getPassedAt().isAfter(exited.getPassedAt())) {
             return Validated.failureWith(ConstraintViolation.builder()
                     .name("enteredAt")
@@ -41,7 +43,8 @@ public class HighwayDrive {
         return Validated.successWith(Range.closed(entered, exited));
     };
 
-    public static Arguments1Validator<Map<String, Object>, HighwayDrive> mapValidator = ArgumentsValidators
+    @SuppressWarnings("unchecked")
+    public static final Arguments1Validator<Map<String, Object>, HighwayDrive> mapValidator = ArgumentsValidators
             .combine(
                     Driver.mapValidator.<Map<String, Object>>compose(m -> (Map<String, Object>) m.get("driver")),
                     ArgumentsValidators.combine(PassEvent.mapValidator.<Map<String, Object>>compose(m -> (Map<String, Object>) m.get("entered")),

@@ -1,8 +1,6 @@
 package com.example.web.config;
 
 import com.example.web.interceptor.RemoteCallLoggingInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +12,6 @@ import java.time.Duration;
 
 @Configuration
 public class RestTemplateConfig {
-    private static final Logger LOG = LoggerFactory.getLogger("restClient");
     @Bean
     public RestTemplate restTemplate() {
         RestTemplateBuilder builder = new RestTemplateBuilder();

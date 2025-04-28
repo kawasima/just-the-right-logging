@@ -1,9 +1,7 @@
 package com.example.web.domain;
 
-import am.ik.yavi.arguments.EnumValidator;
 import am.ik.yavi.arguments.StringValidator;
 import am.ik.yavi.builder.StringValidatorBuilder;
-import am.ik.yavi.core.Validated;
 
 import java.util.Set;
 

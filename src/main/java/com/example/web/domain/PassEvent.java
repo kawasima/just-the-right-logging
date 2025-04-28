@@ -2,11 +2,8 @@ package com.example.web.domain;
 
 import am.ik.yavi.arguments.Arguments1Validator;
 import am.ik.yavi.arguments.ArgumentsValidators;
-import am.ik.yavi.arguments.LocalDateTimeValidator;
 import am.ik.yavi.arguments.StringValidator;
-import am.ik.yavi.builder.LocalDateTimeValidatorBuilder;
 import am.ik.yavi.builder.StringValidatorBuilder;
-import am.ik.yavi.core.CustomConstraint;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -29,15 +26,15 @@ public class PassEvent implements Comparable<PassEvent> {
         this.passedAt = passedAt;
     }
 
-    static StringValidator<String> interchangeCodeValidator = StringValidatorBuilder.of("interchangeCode",
+    static final StringValidator<String> interchangeCodeValidator = StringValidatorBuilder.of("interchangeCode",
             c -> c.notNull().lessThanOrEqual(10))
             .build();
-    public static StringValidator<LocalDateTime> passedAtValidator = StringValidatorBuilder.of("passedAt",
+    public static final StringValidator<LocalDateTime> passedAtValidator = StringValidatorBuilder.of("passedAt",
                     c -> c.pattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"))
             .build()
             .andThen(LocalDateTime::parse);
 
-    public static Arguments1Validator<Map<String, Object>, PassEvent> mapValidator = ArgumentsValidators
+    public static final Arguments1Validator<Map<String, Object>, PassEvent> mapValidator = ArgumentsValidators
             .combine(
                     interchangeCodeValidator.<Map<String, Object>>compose(m -> (String) m.get("interchangeCode")),
                     passedAtValidator.<Map<String, Object>>compose(m -> (String) m.get("passedAt"))

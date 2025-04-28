@@ -3,7 +3,6 @@ package com.example.web.domain.rule;
 import com.example.web.domain.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.EnumSet;
 
 import static com.example.web.domain.RouteType.RURAL;

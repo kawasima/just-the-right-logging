@@ -1,6 +1,6 @@
 package com.example.web.interceptor;
 
-import com.example.logging.RemoteCallLogger;
+import com.example.logging.Markers;
 import io.micrometer.common.lang.NonNullApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +23,13 @@ public class RemoteCallLoggingInterceptor implements ClientHttpRequestIntercepto
         MDC.put("method", request.getMethod().name());
         MDC.put("uri", request.getURI().toString());
         MDC.put("headers", Objects.toString(request.getHeaders()));
-        LOG.info(RemoteCallLogger.MARKER, "{}", new String(body, StandardCharsets.UTF_8));
+        LOG.info(Markers.REMOTE_CALL, "{}", new String(body, StandardCharsets.UTF_8));
 
         try {
             ClientHttpResponse response = execution.execute(request, body);
             MDC.put("exchangeType", "response");
             MDC.put("headers", Objects.toString(response.getHeaders()));
-            LOG.info(RemoteCallLogger.MARKER, "{}", new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
+            LOG.info(Markers.REMOTE_CALL, "{}", new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
             return response;
         } finally {
             MDC.remove("exchangeType");
